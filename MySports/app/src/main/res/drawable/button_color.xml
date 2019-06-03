@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--按下时-->
+    <item android:state_pressed="true" android:drawable="@drawable/clr_bantouming"/>
+    <!--未按下时-->
+    <item android:state_pressed="false" android:drawable="@drawable/clr_touming"/>
+    <!--默认-->
+    <item android:drawable="@drawable/clr_touming"/>
+</selector>

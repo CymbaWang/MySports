@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    android:background="@color/colorWhite"
+    android:id="@+id/conItem"
+    >
+    <com.example.mysports.util.CircleImageView
+        android:layout_margin="10dp"
+        android:id="@+id/headSculpture"
+        android:src="@drawable/ic_launcher_background"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        />
+    <TextView
+        android:id="@+id/nickName"
+        android:layout_margin="10dp"
+        android:maxLength="16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorBlack"
+        android:layout_toRightOf="@id/headSculpture"
+        android:textSize="24sp"
+        android:text="NAME"/>
+
+    <TextView
+        android:id="@+id/messageContent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorGray2"
+        android:layout_below="@id/nickName"
+        android:layout_alignLeft="@id/nickName"
+        android:maxLength="30"
+        android:text="CONTENT"/>
+
+    <TextView
+        android:id="@+id/lastMessageTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:textColor="@color/colorGray3"
+        android:text="TIME"/>
+
+</RelativeLayout>

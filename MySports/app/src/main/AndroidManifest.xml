@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.mysports">
+
+    <!-- 访问互联网的权限 -->
+    <uses-permission android:name="android.permission.INTERNET" /> <!-- 访问相机的权限 -->
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" /> <!-- 对于文件的读写权限 -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android:permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+    <uses-permission android:name="android.permission.FLASHLIGHT" />
+
+    <application
+        android:name=".util.ApplicationUtil"
+        android:allowBackup="true"
+        android:icon="@drawable/logo"
+        android:label="潮流运动"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".activity.RegisterActivity" />
+        <activity android:name=".activity.LoginActivity" >
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+        </activity>
+        <activity android:name=".activity.ShowPhotoActivity" />
+        <activity android:name=".activity.PhotoActivity" />
+        <activity android:name=".activity.CameraActivity" />
+        <activity
+            android:name=".activity.PublishedActivity"
+            android:clearTaskOnLaunch="true"
+            android:configChanges="keyboardHidden"
+            android:taskAffinity="android.task.camera"
+            android:theme="@android:style/Theme.Black.NoTitleBar" />
+        <activity android:name=".activity.GuanzhuActivity" />
+        <activity android:name=".activity.MeActivity" />
+        <activity android:name=".activity.FensiActivity" />
+        <activity android:name=".activity.ZiliaoActivity" />
+        <activity android:name=".activity.MainActivity">
+
+        </activity>
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.example.gdzc.cameraalbumtest.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+        <activity android:name=".activity.ChatActivity"></activity>
+    </application>
+
+</manifest>

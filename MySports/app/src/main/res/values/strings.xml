@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">MySports</string>
+    <drawable name="clr_normal">#ffffff</drawable>
+    <drawable name="clr_pressed">#B4B4B4</drawable>
+    <drawable name="clr_touming">#00000000</drawable>
+    <drawable name="clr_bantouming">#1A000000</drawable>
+    <drawable name="clr_blue">#FF0099cc</drawable>
+    <drawable name="clr_blue2">#800099CC</drawable>
+    <string name="title_activity_chat">ChatActivity</string>
+</resources>
+
