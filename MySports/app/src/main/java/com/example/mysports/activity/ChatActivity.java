@@ -45,35 +45,38 @@ public class ChatActivity extends AppCompatActivity {
     String content;
     InputStream inputStream;
     OutputStream outputStream;
-    public Handler myHandler = new Handler(){
-        @Override
-        public void handleMessage(Message msg){
-            if(msg.what==0x11){
-                Bundle bundle = msg.getData();
-                if(bundle.getString("msg").equals("connectError")){
-                    Toast.makeText(ChatActivity.this,"Send Fail",Toast.LENGTH_LONG).show();
-                }
-                else{
-                    Gson gson = new GsonBuilder()
-                            .setDateFormat("yyyy-MM-dd")
-                            .create();
-                    MessageContent messageContent = gson.fromJson(bundle.getString("msg"),MessageContent.class);
-                    ApplicationUtil applicationUtil = (ApplicationUtil) getApplication();
-                    applicationUtil.setMessageContent(messageContent);
+    ApplicationUtil applicationUtil;
+    final List<MessageContent> messageList = new ArrayList<MessageContent>();
 
-                }
-            }
-        }
-    };
+//    public Handler myHandler = new Handler(){
+//        @Override
+//        public void handleMessage(Message msg){
+//            if(msg.what==0x11){
+//                Bundle bundle = msg.getData();
+//                if(bundle.getString("msg").equals("connectError")){
+//                    Toast.makeText(ChatActivity.this,"Send Fail",Toast.LENGTH_LONG).show();
+//                }
+//                else{
+//                    Gson gson = new GsonBuilder()
+//                            .setDateFormat("yyyy-MM-dd")
+//                            .create();
+//                    MessageContent messageContent = gson.fromJson(bundle.getString("msg"),MessageContent.class);
+//                    ApplicationUtil applicationUtil = (ApplicationUtil) getApplication();
+//                    applicationUtil.setMessageContent(messageContent);
+//
+//                }
+//            }
+//        }
+//    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
-        ApplicationUtil applicationUtil = (ApplicationUtil)getApplication();
+        applicationUtil = (ApplicationUtil)getApplication();
         User user = applicationUtil.getUser();
         ListView listView = (ListView)findViewById(R.id.lv_chat_dialog);
-        final List<MessageContent> messageList = new ArrayList<MessageContent>();
+
 //        messageList.add(new MessageContent(R.drawable.liweisi,"zzy","asndnasd",new Date("2019/5/9 19:27:15"),user.getUserAccount()));
 //        messageList.add(new MessageContent(R.drawable.liweisi,"aaa","qqqeerr",new Date("2019/5/9 19:28:45"),user.getUserAccount()));
         ChatAdapter chatAdapter = new ChatAdapter(this.getApplicationContext(),messageList);
@@ -94,9 +97,20 @@ public class ChatActivity extends AppCompatActivity {
                 if(content.equals(""))
                     Toast.makeText(ChatActivity.this,"NULL",Toast.LENGTH_SHORT).show();
                 else
-                    new ChatThread(content).start();
+                {
+                    ListView listView = (ListView)findViewById(R.id.lv_chat_dialog);
+                    User user = applicationUtil.getUser();
+                    messageList.add(new MessageContent(R.drawable.liweisi,"aa",content,new Date("2019/5/9 19:27:15"),1,2));
+                    ChatAdapter chatAdapter = new ChatAdapter(ChatActivity.this,messageList);
+                    listView.setAdapter(chatAdapter);
+                }
+                new ChatThread(content).start();
             }
         });
+    }
+
+    public void tryit(){
+        ListView listView = (ListView)findViewById(R.id.lv_chat_dialog);
     }
 
     public void onDestroy(){
@@ -127,9 +141,9 @@ public class ChatActivity extends AppCompatActivity {
                 if(applicationUtil.getSocket()==null)
                     applicationUtil.init();
                 socket = applicationUtil.getSocket();
-                inputStream = applicationUtil.getInputStream();
-                outputStream = applicationUtil.getOutputStream();
 
+                outputStream = applicationUtil.getOutputStream();
+                inputStream = applicationUtil.getInputStream();
                 User user = applicationUtil.getUser();
                 SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 String data = formatter.format(System.currentTimeMillis());
@@ -151,11 +165,11 @@ public class ChatActivity extends AppCompatActivity {
                 buffer = line + buffer;
                 bundle.putString("msg",buffer);
                 msg.setData(bundle);
-                myHandler.sendMessage(msg);
+//                myHandler.sendMessage(msg);
             }catch (SocketTimeoutException aa){
                 bundle.putString("msg","connectError");
                 msg.setData(bundle);
-                myHandler.sendMessage(msg);
+//                myHandler.sendMessage(msg);
             }catch (IOException e){
                 e.printStackTrace();
             }catch (Exception ee){

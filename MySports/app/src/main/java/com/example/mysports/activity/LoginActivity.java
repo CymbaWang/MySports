@@ -13,7 +13,7 @@ import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SimplePropertyPreFilter;
-import com.example.mysports.MessageListenerThread;
+import com.example.mysports.ClientListenThread;
 import com.example.mysports.R;
 import com.example.mysports.model.Request;
 import com.example.mysports.model.User;
@@ -21,16 +21,11 @@ import com.example.mysports.util.ApplicationUtil;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 
@@ -46,12 +41,13 @@ public class LoginActivity extends AppCompatActivity {
     String password;
     InputStream inputStream;
     OutputStream outputStream;
-    MessageListenerThread messageListenerThread;
+//    MessageListenerThread messageListenerThread;
 
 
     public Handler myHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
+            System.out.println("handling");
             if (msg.what == 0x11) {
                 Bundle bundle = msg.getData();
                 if(bundle.getString("msg").equals("connectError")){
@@ -96,7 +92,8 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(LoginActivity.this,"用户名或密码为空",Toast.LENGTH_SHORT).show();
                 }else{
                     new LoginThread(account, password).start();
-                    new MessageListenerThread(socket).start();
+
+//                    new MessageListenerThread(socket).start();
                 }
             }
         });
@@ -144,7 +141,7 @@ public class LoginActivity extends AppCompatActivity {
                 //获取输入输出流
                 inputStream = applicationUtil.getInputStream();
                 outputStream = applicationUtil.getOutputStream();
-
+                new ClientListenThread(socket).start();
                 //向服务器发送信息
                 User user = new User(account, password);
                 SimplePropertyPreFilter filter = new SimplePropertyPreFilter(User.class, "userAccount","userPassword");
@@ -152,20 +149,28 @@ public class LoginActivity extends AppCompatActivity {
                 Request request = new Request(1,jsonStu);
                 Gson gson = new Gson();
                 String result = gson.toJson(request) +"\n";
-                outputStream.write(result.getBytes("UTF-8"));
+                if(outputStream!=null)
+                  outputStream.write(result.getBytes("UTF-8"));
+              else
+                {
+                    outputStream=applicationUtil.getSocket().getOutputStream();
+                    outputStream.write(result.getBytes("UTF-8"));
+                }
                 outputStream.flush();
                 //半关闭socket(不加此话发不出数据)
                 //socket.shutdownOutput();
 
                 //读取发来服务器信息
-                BufferedReader bff = new BufferedReader(new InputStreamReader(inputStream));
-                String line = null;
-                buffer="";
-                line = bff.readLine();
-                buffer = line + buffer;
-                bundle.putString("msg", buffer);
-                msg.setData(bundle);
+//                BufferedReader bff = new BufferedReader(new InputStreamReader(inputStream));
+//                String line = null;
+//                buffer="";
+//                line = bff.readLine();
+//                buffer = line + buffer;
+//                bundle.putString("msg", buffer);
+//                msg.setData(bundle);
                 //发送消息 修改UI线程中的组件
+                bundle.putString("msg","r");
+                msg.setData(bundle);
                 myHandler.sendMessage(msg);
                 //bff.close();
             } catch (SocketTimeoutException aa) {
