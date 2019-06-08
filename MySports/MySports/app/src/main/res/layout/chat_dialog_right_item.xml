@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal" >
+
+    <TextView
+        android:id="@+id/rightNickName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/tv_chat_me_message"
+        android:layout_alignRight="@+id/tv_chat_me_message"
+        android:padding="10dp"
+        android:text="azxx"
+        />
+
+    <TextView
+        android:id="@+id/tv_chat_me_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="30dp"
+        android:layout_toLeftOf="@+id/iv_chat_imagr_right"
+        android:background="@drawable/app_lvjian_chat_right"
+        android:padding="10dp"
+        android:text="zhengzhengyang" />
+
+
+    <com.example.mysports.util.CircleImageView
+        android:layout_margin="10dp"
+        android:id="@+id/iv_chat_imagr_right"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentRight="true"
+        android:layout_gravity="top"
+        android:src="@drawable/app_lvjian_message_background" />
+
+    <TextView
+        android:id="@+id/right_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@+id/tv_chat_me_message"
+        android:layout_alignBottom="@+id/tv_chat_me_message"
+        android:textColor="@color/colorGray3"
+        android:text="time"
+        />
+
+</RelativeLayout>
