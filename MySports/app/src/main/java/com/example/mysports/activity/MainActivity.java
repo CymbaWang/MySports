@@ -25,6 +25,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.mysports.ClientListenThread;
 import com.example.mysports.R;
 import com.example.mysports.adapter.ChatAdapter;
 import com.example.mysports.adapter.ContactAdapter;
@@ -39,6 +40,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.Socket;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -171,9 +173,14 @@ public class MainActivity extends AppCompatActivity implements android.view.View
     private ImageButton mXiaoxi;
     private ImageButton mMe;
 
+    Socket socket;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ApplicationUtil applicationUtil = (ApplicationUtil)getApplication();
+        socket=applicationUtil.getSocket();
+        new ClientListenThread(socket).start();
         requestWindowFeature(Window.FEATURE_NO_TITLE);  //去掉程序原有的标题栏
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);//去掉信息栏
         setContentView(R.layout.activity_main);

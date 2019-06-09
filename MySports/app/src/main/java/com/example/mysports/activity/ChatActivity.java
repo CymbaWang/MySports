@@ -46,6 +46,7 @@ public class ChatActivity extends AppCompatActivity {
     InputStream inputStream;
     OutputStream outputStream;
     ApplicationUtil applicationUtil;
+    public static ChatActivity instance=null;
     final List<MessageContent> messageList = new ArrayList<MessageContent>();
 
 //    public Handler myHandler = new Handler(){
@@ -72,6 +73,7 @@ public class ChatActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        instance=this;
         setContentView(R.layout.activity_chat);
         applicationUtil = (ApplicationUtil)getApplication();
         User user = applicationUtil.getUser();
@@ -88,6 +90,14 @@ public class ChatActivity extends AppCompatActivity {
 
     }
 
+    public void showMessage(MessageContent mc){
+        ListView listView = (ListView)findViewById(R.id.lv_chat_dialog);
+        User user = applicationUtil.getUser();
+        messageList.add(new MessageContent(R.drawable.liweisi,mc.getNickName(),mc.getContent(),mc.getTime(),mc.getSenderId(),mc.getReceiveId()));
+        ChatAdapter chatAdapter = new ChatAdapter(ChatActivity.this,messageList);
+        listView.setAdapter(chatAdapter);
+    }
+
     public void onStart(){
         super.onStart();
         send_button.setOnClickListener(new View.OnClickListener(){
@@ -101,6 +111,7 @@ public class ChatActivity extends AppCompatActivity {
                     ListView listView = (ListView)findViewById(R.id.lv_chat_dialog);
                     User user = applicationUtil.getUser();
                     messageList.add(new MessageContent(R.drawable.liweisi,"aa",content,new Date("2019/5/9 19:27:15"),1,2));
+//                    showMessage(new MessageContent(R.drawable.liweisi,"aa",content,new Date("2019/5/9 19:27:15"),1,2));
                     ChatAdapter chatAdapter = new ChatAdapter(ChatActivity.this,messageList);
                     listView.setAdapter(chatAdapter);
                 }
@@ -108,6 +119,8 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
     }
+
+
 
     public void tryit(){
         ListView listView = (ListView)findViewById(R.id.lv_chat_dialog);
@@ -158,13 +171,13 @@ public class ChatActivity extends AppCompatActivity {
                 outputStream.write(result.getBytes("UTF-8"));
                 outputStream.flush();
                 //
-                BufferedReader bff = new BufferedReader(new InputStreamReader(inputStream));
-                String line = null;
-                buffer = "";
-                line = bff.readLine();
-                buffer = line + buffer;
-                bundle.putString("msg",buffer);
-                msg.setData(bundle);
+//                BufferedReader bff = new BufferedReader(new InputStreamReader(inputStream));
+//                String line = null;
+//                buffer = "";
+//                line = bff.readLine();
+//                buffer = line + buffer;
+//                bundle.putString("msg",buffer);
+//                msg.setData(bundle);
 //                myHandler.sendMessage(msg);
             }catch (SocketTimeoutException aa){
                 bundle.putString("msg","connectError");

@@ -66,6 +66,7 @@ public class LoginActivity extends AppCompatActivity {
                     Intent intent = new Intent(LoginActivity.this,MainActivity.class);
 
                     startActivity(intent);
+
                 }
             }
         }
@@ -134,43 +135,51 @@ public class LoginActivity extends AppCompatActivity {
             bundle.clear();
             try {
                 //连接服务器 并设置连接超时为5秒
+                System.out.println("msg-rrw");
                 ApplicationUtil applicationUtil = (ApplicationUtil) getApplication();
                 if(applicationUtil.getSocket()==null)
                     applicationUtil.init();
                 socket = applicationUtil.getSocket();
+                System.out.println("msg-r61246");
                 //获取输入输出流
                 inputStream = applicationUtil.getInputStream();
                 outputStream = applicationUtil.getOutputStream();
-                new ClientListenThread(socket).start();
+                System.out.println("msg-r6666");
+
                 //向服务器发送信息
                 User user = new User(account, password);
                 SimplePropertyPreFilter filter = new SimplePropertyPreFilter(User.class, "userAccount","userPassword");
                 String jsonStu = JSON.toJSONString(user,filter);
+                System.out.println("msg-r656");
                 Request request = new Request(1,jsonStu);
                 Gson gson = new Gson();
                 String result = gson.toJson(request) +"\n";
+                System.out.println("msg-r66");
                 if(outputStream!=null)
                   outputStream.write(result.getBytes("UTF-8"));
               else
                 {
+                    System.out.println("msg-r45");
                     outputStream=applicationUtil.getSocket().getOutputStream();
                     outputStream.write(result.getBytes("UTF-8"));
                 }
+                System.out.println("msg-r12");
                 outputStream.flush();
                 //半关闭socket(不加此话发不出数据)
                 //socket.shutdownOutput();
 
                 //读取发来服务器信息
-//                BufferedReader bff = new BufferedReader(new InputStreamReader(inputStream));
-//                String line = null;
-//                buffer="";
-//                line = bff.readLine();
-//                buffer = line + buffer;
-//                bundle.putString("msg", buffer);
-//                msg.setData(bundle);
-                //发送消息 修改UI线程中的组件
-                bundle.putString("msg","r");
+                BufferedReader bff = new BufferedReader(new InputStreamReader(inputStream));
+                String line = null;
+                buffer="";
+                line = bff.readLine();
+                buffer = line + buffer;
+                bundle.putString("msg", buffer);
                 msg.setData(bundle);
+                //发送消息 修改UI线程中的组件
+                System.out.println("msg-r");
+//                bundle.putString("msg","r");
+//                msg.setData(bundle);
                 myHandler.sendMessage(msg);
                 //bff.close();
             } catch (SocketTimeoutException aa) {
