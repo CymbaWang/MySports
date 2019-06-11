@@ -25,14 +25,18 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSON;
 import com.example.mysports.ClientListenThread;
 import com.example.mysports.R;
 import com.example.mysports.adapter.ChatAdapter;
 import com.example.mysports.adapter.ContactAdapter;
+import com.example.mysports.model.Request;
 import com.example.mysports.model.User;
 import com.example.mysports.pojo.ContactItem;
 import com.example.mysports.pojo.MessageContent;
+import com.example.mysports.pojo.MsgRequest;
 import com.example.mysports.util.ApplicationUtil;
+import com.google.gson.Gson;
 import com.lcw.library.imagepicker.ImagePicker;
 
 import java.io.BufferedOutputStream;
@@ -40,6 +44,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -49,108 +54,6 @@ import java.util.List;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements android.view.View.OnClickListener {
-   /* private Fragment[] mFragments;
-    private RadioGroup bottomRadioGroup;
-    private FragmentManager fragmentManager;
-    private FragmentTransaction fragmentTransaction;
-    private RadioButton radioButton1,radioButton2,radioButton3,radioButton4,radioButton5;
-
-    private void setFragmentIndicator(){
-        radioButton1=(RadioButton)findViewById(R.id.radioButton1);
-        radioButton2=(RadioButton)findViewById(R.id.radioButton2);
-        radioButton3=(RadioButton)findViewById(R.id.radioButton3);
-        radioButton4=(RadioButton)findViewById(R.id.radioButton4);
-        radioButton5=(RadioButton)findViewById(R.id.radioButton5);
-
-        Drawable radio_button_drawable1=getResources().getDrawable(R.drawable.yundong_pressed);
-        radio_button_drawable1.setBounds(0,0,40,40);
-        radioButton1.setCompoundDrawables(null,radio_button_drawable1,null,null);
-
-        Drawable radio_button_drawable2=getResources().getDrawable(R.drawable.shequ_normal);
-        radio_button_drawable2.setBounds(0,0,40,40);
-        radioButton2.setCompoundDrawables(null,radio_button_drawable2,null,null);
-
-        Drawable radio_button_drawable3=getResources().getDrawable(R.drawable.faxian_normal);
-        radio_button_drawable3.setBounds(0,0,40,40);
-        radioButton3.setCompoundDrawables(null,radio_button_drawable3,null,null);
-
-        Drawable radio_button_drawable4=getResources().getDrawable(R.drawable.xiaoxi_normal);
-        radio_button_drawable4.setBounds(0,0,40,40);
-        radioButton4.setCompoundDrawables(null,radio_button_drawable4,null,null);
-
-        Drawable radio_button_drawable5=getResources().getDrawable(R.drawable.me_normal);
-        radio_button_drawable5.setBounds(0,0,40,40);
-        radioButton5.setCompoundDrawables(null,radio_button_drawable5,null,null);
-
-        bottomRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                fragmentTransaction=fragmentManager.beginTransaction().hide(mFragments[0]).hide(mFragments[1]).hide(mFragments[2]).hide(mFragments[3]).hide(mFragments[4]);
-                switch (checkedId){
-                    case R.id.radioButton1:
-                        fragmentTransaction.show(mFragments[0]).commit();
-                        resetImg();
-                        Drawable radio_button_drawable6=getResources().getDrawable(R.drawable.yundong_pressed);
-                        radio_button_drawable6.setBounds(0,0,40,40);
-                        radioButton1.setCompoundDrawables(null,radio_button_drawable6,null,null);
-                        break;
-                    case R.id.radioButton2:
-                        fragmentTransaction.show(mFragments[1]).commit();
-                        resetImg();
-                        Drawable radio_button_drawable7=getResources().getDrawable(R.drawable.shequ_pressed);
-                        radio_button_drawable7.setBounds(0,0,40,40);
-                        radioButton2.setCompoundDrawables(null,radio_button_drawable7,null,null);
-                        break;
-                    case R.id.radioButton3:
-                        fragmentTransaction.show(mFragments[2]).commit();
-                        resetImg();
-                        Drawable radio_button_drawable8=getResources().getDrawable(R.drawable.faxian_pressed);
-                        radio_button_drawable8.setBounds(0,0,40,40);
-                        radioButton3.setCompoundDrawables(null,radio_button_drawable8,null,null);
-                        break;
-                    case R.id.radioButton4:
-                        fragmentTransaction.show(mFragments[3]).commit();
-                        resetImg();
-                        Drawable radio_button_drawable9=getResources().getDrawable(R.drawable.xiaoxi_pressed);
-                        radio_button_drawable9.setBounds(0,0,40,40);
-                        radioButton4.setCompoundDrawables(null,radio_button_drawable9,null,null);
-                        break;
-                    case R.id.radioButton5:
-                        fragmentTransaction.show(mFragments[4]).commit();
-                        resetImg();
-                        Drawable radio_button_drawable10=getResources().getDrawable(R.drawable.me_pressed);
-                        radio_button_drawable10.setBounds(0,0,40,40);
-                        radioButton5.setCompoundDrawables(null,radio_button_drawable10,null,null);
-                        break;
-                }
-            }
-        });
-    }
-    //把所有图片变暗
-    public void resetImg(){
-        Drawable radio_button_drawable1=getResources().getDrawable(R.drawable.yundong_normal);
-        radio_button_drawable1.setBounds(0,0,40,40);
-        radioButton1.setCompoundDrawables(null,radio_button_drawable1,null,null);
-
-        Drawable radio_button_drawable2=getResources().getDrawable(R.drawable.shequ_normal);
-        radio_button_drawable2.setBounds(0,0,40,40);
-        radioButton2.setCompoundDrawables(null,radio_button_drawable2,null,null);
-
-        Drawable radio_button_drawable3=getResources().getDrawable(R.drawable.faxian_normal);
-        radio_button_drawable3.setBounds(0,0,40,40);
-        radioButton3.setCompoundDrawables(null,radio_button_drawable3,null,null);
-
-        Drawable radio_button_drawable4=getResources().getDrawable(R.drawable.xiaoxi_normal);
-        radio_button_drawable4.setBounds(0,0,40,40);
-        radioButton4.setCompoundDrawables(null,radio_button_drawable4,null,null);
-
-        Drawable radio_button_drawable5=getResources().getDrawable(R.drawable.me_normal);
-        radio_button_drawable5.setBounds(0,0,40,40);
-        radioButton5.setCompoundDrawables(null,radio_button_drawable5,null,null);
-    }
-    */
-
-
     private TextView username_text;
     //临时图片路径
     private File tempFile = new File(Environment.getExternalStorageDirectory(), getPhotoFileName());
@@ -172,6 +75,7 @@ public class MainActivity extends AppCompatActivity implements android.view.View
     private ImageButton mFaxian;
     private ImageButton mXiaoxi;
     private ImageButton mMe;
+    public static MainActivity instance = null;
 
     Socket socket;
 
@@ -180,6 +84,7 @@ public class MainActivity extends AppCompatActivity implements android.view.View
         super.onCreate(savedInstanceState);
         ApplicationUtil applicationUtil = (ApplicationUtil)getApplication();
         socket=applicationUtil.getSocket();
+        instance = this;
         new ClientListenThread(socket).start();
         requestWindowFeature(Window.FEATURE_NO_TITLE);  //去掉程序原有的标题栏
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);//去掉信息栏
@@ -187,16 +92,6 @@ public class MainActivity extends AppCompatActivity implements android.view.View
         initView();
         initViewPage();
         initEvent();
-       /* mFragments=new Fragment[5]; //5个fragment
-        fragmentManager=getSupportFragmentManager();
-        mFragments[0]=fragmentManager.findFragmentById(R.id.fragment_yundong);
-        mFragments[1]=fragmentManager.findFragmentById(R.id.fragment_shequ);
-        mFragments[2]=fragmentManager.findFragmentById(R.id.fragment_faxian);
-        mFragments[3]=fragmentManager.findFragmentById(R.id.fragment_xiaoxi);
-        mFragments[4]=fragmentManager.findFragmentById(R.id.fragment_me);
-        fragmentTransaction=fragmentManager.beginTransaction().hide(mFragments[0]).hide(mFragments[1]).hide(mFragments[2]).hide(mFragments[3]).hide(mFragments[4]);
-        fragmentTransaction.show(mFragments[0]).commit();
-        setFragmentIndicator();*/
     }
 
     //拍照
@@ -319,7 +214,6 @@ public class MainActivity extends AppCompatActivity implements android.view.View
                         textView1.setText("发现");
                         break;
                     case 3:
-                        showContactList();
                         resetImg();
                         mXiaoxi.setImageResource(R.drawable.xiaoxi_pressed);
                         textView1.setText("消息");
@@ -377,6 +271,7 @@ public class MainActivity extends AppCompatActivity implements android.view.View
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                new GetMsgThread().start();
                 Intent intent = new Intent(MainActivity.this, ChatActivity.class);
                 startActivity(intent);
             }
@@ -484,7 +379,7 @@ public class MainActivity extends AppCompatActivity implements android.view.View
                 break;
             case R.id.tab_xiaoxi:
                 mViewPager.setCurrentItem(3);
-                showContactList();
+                new GetConList().start();
                 resetImg();
                 mXiaoxi.setImageResource(R.drawable.xiaoxi_pressed);
                 textView1.setText("消息");
@@ -506,10 +401,7 @@ public class MainActivity extends AppCompatActivity implements android.view.View
     }
 
     //显示联系人列表
-    public void showContactList() {
-        List<ContactItem> contactList = new ArrayList<>();
-        initContactList(contactList);
-
+    public void showContactList(List<ContactItem> contactList) {
         ContactAdapter adapter = new ContactAdapter(this.getApplicationContext(), R.layout.contact_item, contactList);
         ListView listView = findViewById(R.id.xiaoxi_list);
         listView.setAdapter(adapter);
@@ -526,6 +418,47 @@ public class MainActivity extends AppCompatActivity implements android.view.View
         contactList.add(m3);
         contactList.add(m4);
 
+    }
+
+    class GetConList extends Thread{
+        @Override
+        public void run(){
+            ApplicationUtil applicationUtil = (ApplicationUtil)getApplication();
+            socket = applicationUtil.getSocket();
+            try {
+                OutputStream outputStream = socket.getOutputStream();
+                String jsonStu = JSON.toJSONString(applicationUtil.getUser().getUserId());
+                Request request = new Request(102,jsonStu);
+                Gson gson = new Gson();
+                String result = gson.toJson(request)+"\n";
+                outputStream.write(result.getBytes("UTF-8"));
+                outputStream.flush();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    class GetMsgThread extends Thread{
+        @Override
+        public void run(){
+            ApplicationUtil applicationUtil = (ApplicationUtil)getApplication();
+            socket = applicationUtil.getSocket();
+            try {
+                OutputStream outputStream = socket.getOutputStream();
+                MsgRequest msgRequest = new MsgRequest();
+                msgRequest.setSendId(1);
+                msgRequest.setReceiveId(1);
+                String jsonStu = JSON.toJSONString(msgRequest);
+                Request request = new Request(101,jsonStu);
+                Gson gson = new Gson();
+                String result = gson.toJson(request)+"\n";
+                outputStream.write(result.getBytes("UTF-8"));
+                outputStream.flush();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 

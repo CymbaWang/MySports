@@ -39,11 +39,10 @@ import java.util.List;
 public class ChatActivity extends AppCompatActivity {
 
     Socket socket;
-    String buffer;
+
     EditText content_text;
     Button send_button;
     String content;
-    InputStream inputStream;
     OutputStream outputStream;
     ApplicationUtil applicationUtil;
     public static ChatActivity instance=null;
@@ -110,7 +109,7 @@ public class ChatActivity extends AppCompatActivity {
                 {
                     ListView listView = (ListView)findViewById(R.id.lv_chat_dialog);
                     User user = applicationUtil.getUser();
-                    messageList.add(new MessageContent(R.drawable.liweisi,"aa",content,new Date("2019/5/9 19:27:15"),1,2));
+                    messageList.add(new MessageContent(R.drawable.liweisi,"aa",content,new Date("2019/5/9 19:27:15"),1,1));
 //                    showMessage(new MessageContent(R.drawable.liweisi,"aa",content,new Date("2019/5/9 19:27:15"),1,2));
                     ChatAdapter chatAdapter = new ChatAdapter(ChatActivity.this,messageList);
                     listView.setAdapter(chatAdapter);
@@ -130,13 +129,13 @@ public class ChatActivity extends AppCompatActivity {
         super.onDestroy();
         try{
             //关闭各种输入输出流
-            inputStream.close();
             outputStream.close();
             socket.close();
         }catch (IOException e){
             e.printStackTrace();
         }
     }
+
 
     class ChatThread extends Thread{
         public String content;
@@ -156,13 +155,12 @@ public class ChatActivity extends AppCompatActivity {
                 socket = applicationUtil.getSocket();
 
                 outputStream = applicationUtil.getOutputStream();
-                inputStream = applicationUtil.getInputStream();
                 User user = applicationUtil.getUser();
                 SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 String data = formatter.format(System.currentTimeMillis());
 
 //                MessageContent messageContent = new MessageContent(1,user.getUserName(),content,new Date(),user.getUserId(),1);
-                News news = new News(1,2,content,new Date(),false);
+                News news = new News(1,1,content,new Date(),false);
 
                 String jsonStu = JSON.toJSONString(news);
                 Request request = new Request(100,jsonStu);
