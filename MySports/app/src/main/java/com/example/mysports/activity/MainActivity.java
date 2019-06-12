@@ -76,6 +76,7 @@ public class MainActivity extends AppCompatActivity implements android.view.View
     private ImageButton mXiaoxi;
     private ImageButton mMe;
     public static MainActivity instance = null;
+    public static int clickConId=0;
 
     Socket socket;
 
@@ -85,7 +86,7 @@ public class MainActivity extends AppCompatActivity implements android.view.View
         ApplicationUtil applicationUtil = (ApplicationUtil)getApplication();
         socket=applicationUtil.getSocket();
         instance = this;
-        new ClientListenThread(socket).start();
+        new ClientListenThread(socket,applicationUtil.getUser()).start();
         requestWindowFeature(Window.FEATURE_NO_TITLE);  //去掉程序原有的标题栏
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);//去掉信息栏
         setContentView(R.layout.activity_main);
@@ -271,7 +272,12 @@ public class MainActivity extends AppCompatActivity implements android.view.View
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                new GetMsgThread().start();
+                ApplicationUtil applicationUtil = (ApplicationUtil) getApplication();
+                List<ContactItem> contactItemList = new ArrayList<>();
+                contactItemList=applicationUtil.getList();
+                System.out.println("this is click listener and you click the button just now ,which means that the position is " + position+" and the conid is "+contactItemList.get(position).getConId());
+                clickConId=contactItemList.get(position).getConId();
+                new GetMsgThread(applicationUtil.getUser().getUserId(),contactItemList.get(position).getConId()).start();
                 Intent intent = new Intent(MainActivity.this, ChatActivity.class);
                 startActivity(intent);
             }
@@ -402,23 +408,25 @@ public class MainActivity extends AppCompatActivity implements android.view.View
 
     //显示联系人列表
     public void showContactList(List<ContactItem> contactList) {
+        ApplicationUtil applicationUtil = (ApplicationUtil)getApplication();
+        applicationUtil.setList(contactList);
         ContactAdapter adapter = new ContactAdapter(this.getApplicationContext(), R.layout.contact_item, contactList);
         ListView listView = findViewById(R.id.xiaoxi_list);
         listView.setAdapter(adapter);
     }
 
-    private void initContactList(List<ContactItem> contactList) {
-
-        ContactItem m1 = new ContactItem(R.drawable.liweisi, "AZ", "AZ", new Date("2019/5/8 01:23:11"));
-        ContactItem m2 = new ContactItem(R.drawable.liweisi, "DS", "QWERT", new Date("2019/5/8 22:00:56"));
-        ContactItem m3 = new ContactItem(R.drawable.liweisi, "BA", "CVBNM", new Date("2019/5/8 12:14:05"));
-        ContactItem m4 = new ContactItem(R.drawable.liweisi, "QQS", "QAZWSX", new Date("2019/5/8 10:41:54"));
-        contactList.add(m1);
-        contactList.add(m2);
-        contactList.add(m3);
-        contactList.add(m4);
-
-    }
+//    private void initContactList(List<ContactItem> contactList) {
+//
+//        ContactItem m1 = new ContactItem(R.drawable.liweisi, "AZ", "AZ", new Date("2019/5/8 01:23:11"));
+//        ContactItem m2 = new ContactItem(R.drawable.liweisi, "DS", "QWERT", new Date("2019/5/8 22:00:56"));
+//        ContactItem m3 = new ContactItem(R.drawable.liweisi, "BA", "CVBNM", new Date("2019/5/8 12:14:05"));
+//        ContactItem m4 = new ContactItem(R.drawable.liweisi, "QQS", "QAZWSX", new Date("2019/5/8 10:41:54"));
+//        contactList.add(m1);
+//        contactList.add(m2);
+//        contactList.add(m3);
+//        contactList.add(m4);
+//
+//    }
 
     class GetConList extends Thread{
         @Override
@@ -440,6 +448,13 @@ public class MainActivity extends AppCompatActivity implements android.view.View
     }
 
     class GetMsgThread extends Thread{
+        private int sendId;
+        private int receiveId;
+        public GetMsgThread(int sendId,int receiveId)
+        {
+            this.sendId=sendId;
+            this.receiveId=receiveId;
+        }
         @Override
         public void run(){
             ApplicationUtil applicationUtil = (ApplicationUtil)getApplication();
@@ -447,12 +462,13 @@ public class MainActivity extends AppCompatActivity implements android.view.View
             try {
                 OutputStream outputStream = socket.getOutputStream();
                 MsgRequest msgRequest = new MsgRequest();
-                msgRequest.setSendId(1);
-                msgRequest.setReceiveId(1);
+                msgRequest.setSendId(sendId);
+                msgRequest.setReceiveId(receiveId);
                 String jsonStu = JSON.toJSONString(msgRequest);
                 Request request = new Request(101,jsonStu);
                 Gson gson = new Gson();
                 String result = gson.toJson(request)+"\n";
+                System.out.println("click the button and the gson is "+result);
                 outputStream.write(result.getBytes("UTF-8"));
                 outputStream.flush();
             } catch (IOException e) {

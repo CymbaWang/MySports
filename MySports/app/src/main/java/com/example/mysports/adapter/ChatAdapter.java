@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.mysports.activity.ChatActivity;
+import com.example.mysports.model.User;
 import com.example.mysports.pojo.Fensi;
 import com.example.mysports.R;
 import com.example.mysports.pojo.MessageContent;
@@ -27,10 +28,12 @@ public class ChatAdapter extends BaseAdapter {
 
     private Context context;
     private List<MessageContent> itemList;
+    private User user;
 
-    public ChatAdapter(Context context, List<MessageContent> itemList) {
+    public ChatAdapter(Context context, List<MessageContent> itemList,User user) {
         this.context = context;
         this.itemList = itemList;
+        this.user=user;
     }
 
     @Override
@@ -54,7 +57,7 @@ public class ChatAdapter extends BaseAdapter {
         MessageContent message = itemList.get(position);
         ViewHolder holder = null;
 
-        if (message.getSenderId()==1) {
+        if (message.getSenderId()==user.getUserId()) {
             convertView = inflater.inflate(R.layout.chat_dialog_right_item, parent, false);
             holder = new ViewHolder();
             holder.touxiangImage = convertView.findViewById(R.id.iv_chat_imagr_right);
@@ -69,20 +72,11 @@ public class ChatAdapter extends BaseAdapter {
             holder.nickName = convertView.findViewById(R.id.leftNickName);
             holder.date = convertView.findViewById(R.id.left_time);
         }
-//        holder.touxiangImage.setOnClickListener(new View.OnClickListener()
-//        {
-//            @Override
-//            public void onClick(View view){
-//                Intent intent = new Intent(context,ChatActivity.class);
-//                Bundle bundle = new Bundle();
-//                bundle.putSerializable("key", (Serializable) itemList.get(position));
-//                intent.putExtra(bundle);
-//                context.startActivities(intent);
-//            }
-//        });
+        System.out.println("in the getview the content is "+message.getContent());
         convertView.setTag(holder);
-        holder.touxiangImage.setImageResource(message.getHeadSculpture());
+//        holder.touxiangImage.setImageResource(message.getHeadSculpture());
         holder.content.setText(message.getContent());
+        holder.touxiangImage.setImageResource(R.drawable.liweisi);
         holder.nickName.setText(message.getNickName());
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String data = formatter.format(message.getTime());

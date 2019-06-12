@@ -31,7 +31,8 @@ public class ContactAdapter extends ArrayAdapter<ContactItem> {
         TextView nameView = (TextView)view.findViewById(R.id.nickName);
         TextView textView = (TextView)view.findViewById(R.id.messageContent);
         TextView timeView = (TextView)view.findViewById(R.id.lastMessageTime);
-        imageView.setImageResource(contactItem.getHeadSculpture());
+//        imageView.setImageResource(contactItem.getHeadSculpture());
+        imageView.setImageResource(R.drawable.liweisi);
         nameView.setText(contactItem.getNickName());
         textView.setText(contactItem.getContent());
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

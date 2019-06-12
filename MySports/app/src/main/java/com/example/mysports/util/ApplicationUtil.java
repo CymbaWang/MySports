@@ -3,12 +3,15 @@ package com.example.mysports.util;
 import android.app.Application;
 
 import com.example.mysports.model.User;
+import com.example.mysports.pojo.ContactItem;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ApplicationUtil extends Application {
 
@@ -18,6 +21,16 @@ public class ApplicationUtil extends Application {
     private Socket socket;
     private OutputStream outputStream;
     private InputStream inputStream;
+
+    public List<ContactItem> getList() {
+        return list;
+    }
+
+    public void setList(List<ContactItem> list) {
+        this.list = list;
+    }
+
+    private List<ContactItem> list;
     private User user;
 
     public void init() {
@@ -26,6 +39,7 @@ public class ApplicationUtil extends Application {
              socket.connect(new InetSocketAddress(ADDRESS,PORT), 5000);
              outputStream = socket.getOutputStream();
              inputStream = socket.getInputStream();
+             list = new ArrayList<>();
              }catch (IOException e){
                  e.printStackTrace();
             }

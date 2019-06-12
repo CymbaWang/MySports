@@ -1,42 +1,31 @@
 package com.example.mysports.pojo;
 
-import java.util.Date;
+public class ContactTemp {
 
-public class MessageContent {
+
+    private int conId;
+//    private int userId;
     private int headSculpture;
     private String nickName;
     private String content;
-    private Date time;
-    private int senderId;
-    private int receiveId;
+    private long time;
 
-    public MessageContent(int headSculpture, String nickName, String content, Date time,int senderId,int receiveId) {
+    public ContactTemp(int conid,int headSculpture, String nickName, String content, long time) {
+        this.conId=conid;
         this.headSculpture = headSculpture;
         this.nickName = nickName;
         this.content = content;
         this.time = time;
-        this.senderId=senderId;
-        this.receiveId=receiveId;
+//        this.userId=userId;
     }
 
-    public MessageContent(){}
-
-    public int getSenderId() {
-        return senderId;
-    }
-
-    public void setSenderId(int senderId) {
-        this.senderId = senderId;
-    }
-
-    public int getReceiveId() {
-        return receiveId;
-    }
-
-    public void setReceiveId(int receiveId) {
-        this.receiveId = receiveId;
-    }
-
+//    public int getUserId() {
+//        return userId;
+//    }
+//
+//    public void setUserId(int userId) {
+//        this.userId = userId;
+//    }
 
     public int getHeadSculpture() {
         return headSculpture;
@@ -62,11 +51,18 @@ public class MessageContent {
         this.content = content;
     }
 
-    public Date getTime() {
+    public long getTime() {
         return time;
     }
 
-    public void setTime(Date time) {
+    public int getConId() {
+        return conId;
+    }
+
+    public void setConId(int conId) {
+        this.conId = conId;
+    }
+    public void setTime(long time) {
         this.time = time;
     }
 }
