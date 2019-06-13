@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal" >
+
+    <com.example.mysports.util.CircleImageView
+        android:layout_margin="10dp"
+        android:id="@+id/left_t1"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentLeft="true"
+        android:layout_gravity="top"
+        android:src="@drawable/app_lvjian_message_background" />
+
+    <TextView
+        android:id="@+id/left_n2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/left_n1"
+        android:padding="10dp"
+        android:text="azxx"
+        />
+
+    <ImageView
+        android:id="@+id/left_n1"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="30dp"
+        android:layout_toRightOf="@+id/left_t1"
+        android:padding="10dp"
+        android:background="@drawable/app_lvjian_other_chat_background"
+        />
+
+    <TextView
+        android:id="@+id/left_t2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/left_n1"
+        android:layout_alignBottom="@+id/left_n1"
+        android:textColor="@color/colorGray3"
+        android:text="time"
+        />
+
+</RelativeLayout>

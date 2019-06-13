@@ -9,14 +9,16 @@ public class MessageContent {
     private Date time;
     private int senderId;
     private int receiveId;
+    private int type;
 
-    public MessageContent(int headSculpture, String nickName, String content, Date time,int senderId,int receiveId) {
+    public MessageContent(int headSculpture, String nickName, String content, Date time,int senderId,int receiveId,int type) {
         this.headSculpture = headSculpture;
         this.nickName = nickName;
         this.content = content;
         this.time = time;
         this.senderId=senderId;
         this.receiveId=receiveId;
+        this.type=type;
     }
 
     public MessageContent(){}
@@ -68,5 +70,13 @@ public class MessageContent {
 
     public void setTime(Date time) {
         this.time = time;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
     }
 }

@@ -80,7 +80,7 @@ public class ClientListenThread extends Thread {
                 line = bufferedReader.readLine();
                 String read = "";
                 read = read + line;
-                System.out.println("read  :" + read);
+//                System.out.println("read  :" + read);
 
                 Gson gson = new GsonBuilder()
                         .setDateFormat("yyyy-MM-dd HH:mm:ss")
@@ -89,7 +89,7 @@ public class ClientListenThread extends Thread {
                 Request request = gson.fromJson(read, Request.class);
 
                 if (request.getType() == 100) {
-                    System.out.println(request.getData());
+//                    System.out.println(request.getData());
                     MsgNewsTemp msgNewsTemp = gson.fromJson(request.getData().toString(), MsgNewsTemp.class);
                     MsgNews msgNews = new MsgNews();
                     NewsTemp newsTemp = new NewsTemp();
@@ -108,9 +108,14 @@ public class ClientListenThread extends Thread {
                     msgNews.setSendName(msgNewsTemp.getSendName());
 
                     showNews(msgNews);
-                    System.out.println("receive success:" + msgNewsTemp.getNews().getSendContent());
+
+                    Message message = new Message();
+                    myHandler.sendMessage(message);
+
+                    System.out.println("this is request function and i execute the 100");
+//                    System.out.println("receive success:" + msgNewsTemp.getNews().getSendContent());
                 } else if (request.getType() == 102) {
-                    System.out.println(request.getData());
+//                    System.out.println(request.getData());
 
                     Gson gson2 = new GsonBuilder()
                             .setDateFormat("yyyy-MM-dd HH:mm:ss")
@@ -135,7 +140,7 @@ public class ClientListenThread extends Thread {
                     }
                     showCon(contactList);
                 } else if (request.getType() == 106) {
-                    System.out.println(request.getData());
+//                    System.out.println(request.getData());
                     List<MsgNewsTemp> msgNewsTempList = new ArrayList<MsgNewsTemp>();
                     msgNewsTempList = gson.fromJson(request.getData().toString(), new TypeToken<List<MsgNewsTemp>>() {
                     }.getType());
@@ -179,6 +184,20 @@ public class ClientListenThread extends Thread {
         messageContent.setHeadSculpture(1);
         messageContent.setContent(msgNews.getNews().getSendContent());
         messageContent.setSenderId(msgNews.getNews().getSenduserId());
+        if(msgNews.getNews().isNewsState())
+        {
+            System.out.println("the status is true and it's pic");
+            messageContent.setType(1);
+        }
+
+        else
+        {
+            System.out.println("the status is false and it's string");
+            messageContent.setType(0);
+        }
+
+//        messageContent.setType(msgNews.getNews().isNewsState());
+
 
         messageList.add(messageContent);
 
