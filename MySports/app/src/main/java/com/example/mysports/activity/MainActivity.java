@@ -77,6 +77,7 @@ public class MainActivity extends AppCompatActivity implements android.view.View
     private ImageButton mMe;
     public static MainActivity instance = null;
     public static int clickConId=0;
+    public static String clickName=null;
 
     Socket socket;
 
@@ -275,8 +276,9 @@ public class MainActivity extends AppCompatActivity implements android.view.View
                 ApplicationUtil applicationUtil = (ApplicationUtil) getApplication();
                 List<ContactItem> contactItemList = new ArrayList<>();
                 contactItemList=applicationUtil.getList();
-                System.out.println("this is click listener and you click the button just now ,which means that the position is " + position+" and the conid is "+contactItemList.get(position).getConId());
+//                System.out.println("this is click listener and you click the button just now ,which means that the position is " + position+" and the conid is "+contactItemList.get(position).getConId());
                 clickConId=contactItemList.get(position).getConId();
+                clickName=contactItemList.get(position).getNickName();
                 new GetMsgThread(applicationUtil.getUser().getUserId(),contactItemList.get(position).getConId()).start();
                 Intent intent = new Intent(MainActivity.this, ChatActivity.class);
                 startActivity(intent);
@@ -408,6 +410,7 @@ public class MainActivity extends AppCompatActivity implements android.view.View
 
     //显示联系人列表
     public void showContactList(List<ContactItem> contactList) {
+
         ApplicationUtil applicationUtil = (ApplicationUtil)getApplication();
         applicationUtil.setList(contactList);
         ContactAdapter adapter = new ContactAdapter(this.getApplicationContext(), R.layout.contact_item, contactList);

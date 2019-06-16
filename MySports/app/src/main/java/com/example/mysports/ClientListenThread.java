@@ -38,10 +38,11 @@ public class ClientListenThread extends Thread {
     private InputStream inputStream;
     private MessageContent messageContent = null;
     private List<ContactItem> contactList = new ArrayList<>();
+    private int typ = 0;
 
     private boolean isStart = true;
 
-    final List<MessageContent> messageList = new ArrayList<MessageContent>();
+    List<MessageContent> messageList = new ArrayList<MessageContent>();
 
     public ClientListenThread(Socket socket, User user) {
         this.user = user;
@@ -52,7 +53,7 @@ public class ClientListenThread extends Thread {
     public Handler myHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            ChatActivity.instance.showMessage(messageList);
+            ChatActivity.instance.showMessage(messageList,typ);
         }
     };
 
@@ -89,6 +90,8 @@ public class ClientListenThread extends Thread {
                 Request request = gson.fromJson(read, Request.class);
 
                 if (request.getType() == 100) {
+                    typ=1;
+                    messageList = new ArrayList<MessageContent>();
 //                    System.out.println(request.getData());
                     MsgNewsTemp msgNewsTemp = gson.fromJson(request.getData().toString(), MsgNewsTemp.class);
                     MsgNews msgNews = new MsgNews();
@@ -117,6 +120,8 @@ public class ClientListenThread extends Thread {
                 } else if (request.getType() == 102) {
 //                    System.out.println(request.getData());
 
+                    contactList = new ArrayList<>();
+
                     Gson gson2 = new GsonBuilder()
                             .setDateFormat("yyyy-MM-dd HH:mm:ss")
                             .create();
@@ -140,6 +145,8 @@ public class ClientListenThread extends Thread {
                     }
                     showCon(contactList);
                 } else if (request.getType() == 106) {
+                    typ=0;
+                    messageList = new ArrayList<MessageContent>();
 //                    System.out.println(request.getData());
                     List<MsgNewsTemp> msgNewsTempList = new ArrayList<MsgNewsTemp>();
                     msgNewsTempList = gson.fromJson(request.getData().toString(), new TypeToken<List<MsgNewsTemp>>() {
@@ -186,13 +193,13 @@ public class ClientListenThread extends Thread {
         messageContent.setSenderId(msgNews.getNews().getSenduserId());
         if(msgNews.getNews().isNewsState())
         {
-            System.out.println("the status is true and it's pic");
+//            System.out.println("the status is true and it's pic");
             messageContent.setType(1);
         }
 
         else
         {
-            System.out.println("the status is false and it's string");
+//            System.out.println("the status is false and it's string");
             messageContent.setType(0);
         }
 

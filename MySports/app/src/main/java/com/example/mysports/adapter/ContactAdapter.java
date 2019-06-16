@@ -31,13 +31,21 @@ public class ContactAdapter extends ArrayAdapter<ContactItem> {
         TextView nameView = (TextView)view.findViewById(R.id.nickName);
         TextView textView = (TextView)view.findViewById(R.id.messageContent);
         TextView timeView = (TextView)view.findViewById(R.id.lastMessageTime);
+
 //        imageView.setImageResource(contactItem.getHeadSculpture());
         imageView.setImageResource(R.drawable.liweisi);
         nameView.setText(contactItem.getNickName());
-        textView.setText(contactItem.getContent());
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String data = formatter.format(contactItem.getTime());
-        timeView.setText(data);
+        if(contactItem.getContent()==null)
+        {
+            textView.setText("[暂无新消息]");
+        }
+        else
+        {
+            textView.setText("[消息]"+contactItem.getContent());
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String data = formatter.format(contactItem.getTime());
+            timeView.setText(data);
+        }
         return view;
     }
 }

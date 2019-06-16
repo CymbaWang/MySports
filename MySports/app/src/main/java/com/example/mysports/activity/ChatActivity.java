@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
@@ -66,7 +67,13 @@ public class ChatActivity extends AppCompatActivity {
     OutputStream outputStream;
     ApplicationUtil applicationUtil;
     String mImagePaths;
+    ImageButton imageButton;
+    TextView title;
+    Button changeWay;
+    Button yuyin;
     int conId;
+    String conName;
+    int ty=0;
     public static ChatActivity instance = null;
     final List<MessageContent> messageList = new ArrayList<MessageContent>();
 
@@ -75,6 +82,7 @@ public class ChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         instance = this;
         conId = MainActivity.clickConId;
+        conName = MainActivity.clickName;
         setContentView(R.layout.activity_chat);
         applicationUtil = (ApplicationUtil) getApplication();
         User user = applicationUtil.getUser();
@@ -85,6 +93,15 @@ public class ChatActivity extends AppCompatActivity {
         content_text = (EditText) findViewById(R.id.et_chat_message);
         send_button = (Button) findViewById(R.id.btn_chat_message_send);
         getPic = (Button) findViewById(R.id.getpic);
+        imageButton = (ImageButton)findViewById(R.id.fanhui_button) ;
+        changeWay = (Button)findViewById(R.id.changeType) ;
+        yuyin = (Button)findViewById(R.id.yuyii) ;
+        title = (TextView) findViewById(R.id.textView) ;
+        title.setText(conName);
+
+
+
+        listView.setSelection(chatAdapter.getCount()-1);
 
         socket = applicationUtil.getSocket();
     }
@@ -97,7 +114,9 @@ public class ChatActivity extends AppCompatActivity {
     };
 
 
-    public void showMessage(List<MessageContent> mc) {
+    public void showMessage(List<MessageContent> mc,int type) {
+        if(type==0)
+           messageList.clear();
         ListView listView = (ListView) findViewById(R.id.lv_chat_dialog);
         User user = applicationUtil.getUser();
         for (int i = 0; i < mc.size(); i++) {
@@ -105,6 +124,8 @@ public class ChatActivity extends AppCompatActivity {
         }
         ChatAdapter chatAdapter = new ChatAdapter(ChatActivity.this, messageList, user);
         listView.setAdapter(chatAdapter);
+
+        listView.setSelection(chatAdapter.getCount()-1);
     }
 
     public void onStart() {
@@ -118,13 +139,23 @@ public class ChatActivity extends AppCompatActivity {
                 else {
                     ListView listView = (ListView) findViewById(R.id.lv_chat_dialog);
                     User user = applicationUtil.getUser();
+//                    messageList.clear();
                     messageList.add(new MessageContent(R.drawable.liweisi, user.getUserName(), content, new Date(), user.getUserId(), conId, 0));
                     ChatAdapter chatAdapter = new ChatAdapter(ChatActivity.this, messageList, user);
                     listView.setAdapter(chatAdapter);
+
+                    listView.setSelection(chatAdapter.getCount()-1);
                 }
                 new ChatThread(content).start();
 
                 content_text.setText("");
+            }
+        });
+
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
 
@@ -146,6 +177,29 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
+
+        changeWay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(ty==0)
+                {
+                    send_button.setVisibility(View.GONE);
+                    content_text.setVisibility(View.GONE);
+                    yuyin.setVisibility(View.VISIBLE);
+                    ty=1;
+                }
+                else
+                {
+                    send_button.setVisibility(View.VISIBLE);
+                    content_text.setVisibility(View.VISIBLE);
+                    yuyin.setVisibility(View.GONE);
+                    ty=0;
+                }
+
+            }
+        });
+
+
     }
 
     private void showIMG(List<MessageContent> messageList) {
@@ -153,6 +207,8 @@ public class ChatActivity extends AppCompatActivity {
         User user = applicationUtil.getUser();
         ChatAdapter chatAdapter = new ChatAdapter(ChatActivity.this, messageList, user);
         listView.setAdapter(chatAdapter);
+
+        listView.setSelection(chatAdapter.getCount()-1);
     }
 
     public class ImgViewAndStart extends Thread {

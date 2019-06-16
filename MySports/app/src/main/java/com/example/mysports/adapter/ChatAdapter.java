@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -41,14 +42,13 @@ import java.util.Date;
 import java.util.List;
 
 
-
-
 public class ChatAdapter extends BaseAdapter {
 
     private Context context;
     private List<MessageContent> itemList;
     private User user;
     private String outOfFile = "/storage/emulated/0/path";
+    private ImageButton ret;
 
     public ChatAdapter(Context context, List<MessageContent> itemList, User user) {
         this.context = context;
@@ -76,7 +76,8 @@ public class ChatAdapter extends BaseAdapter {
         LayoutInflater inflater = LayoutInflater.from(context);
         MessageContent message = itemList.get(position);
         ViewHolder holder = null;
-        if (message.getType()==0) {
+
+        if (message.getType() == 0) {
             if (message.getSenderId() == user.getUserId()) {
                 convertView = inflater.inflate(R.layout.chat_dialog_right_item, parent, false);
                 holder = new ViewHolder();
@@ -93,8 +94,7 @@ public class ChatAdapter extends BaseAdapter {
                 holder.date = convertView.findViewById(R.id.left_time);
             }
             holder.content.setText(message.getContent());
-        }
-        else if(message.getType()==1) {
+        } else if (message.getType() == 1) {
             if (message.getSenderId() == user.getUserId()) {
                 convertView = inflater.inflate(R.layout.right_pic, parent, false);
                 holder = new ViewHolder();
@@ -111,13 +111,12 @@ public class ChatAdapter extends BaseAdapter {
                 holder.date = convertView.findViewById(R.id.left_t2);
             }
 
-            String patth = stringSaveAsFile(message.getContent(),outOfFile);
-            System.out.println("patth = "+patth);
+            String patth = stringSaveAsFile(message.getContent(), outOfFile);
+            System.out.println("patth = " + patth);
             holder.content2.setImageURI(Uri.fromFile(new File(patth)));
 //            Uri uri =getImageContentUri(this.context,translate(message));
 //            holder.content2.setImageURI(uri);
-        }
-        else if(message.getType()==2){
+        } else if (message.getType() == 2) {
             if (message.getSenderId() == user.getUserId()) {
                 convertView = inflater.inflate(R.layout.right_pic, parent, false);
                 holder = new ViewHolder();
@@ -137,7 +136,7 @@ public class ChatAdapter extends BaseAdapter {
 //            System.out.println("the uri has been changed : " + uri.toString());
 
             String uripath = message.getContent().substring(1);
-            System.out.println("the uri path is "+uripath);
+            System.out.println("the uri path is " + uripath);
             holder.content2.setImageURI(Uri.fromFile(new File(uripath)));
             System.out.println("in the getview the content is " + message.getContent().substring(1));
         }
@@ -151,11 +150,16 @@ public class ChatAdapter extends BaseAdapter {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String data = formatter.format(message.getTime());
         holder.date.setText(data);
+
+
+
+
+
         return convertView;
     }
 
     public File translate(MessageContent msg) {
-        File file=null;
+        File file = null;
         try {
             String picm = msg.getContent();
             byte[] bytes;
@@ -169,13 +173,12 @@ public class ChatAdapter extends BaseAdapter {
     }
 
     public File byte2image(byte[] data) {
-        String filename = System.currentTimeMillis()+"";
-        String path =  context.getFilesDir().getPath().toString()+filename+".jpg";
-        System.out.println("path="+path);
+        String filename = System.currentTimeMillis() + "";
+        String path = context.getFilesDir().getPath().toString() + filename + ".jpg";
+        System.out.println("path=" + path);
         File img = new File(filename);
         try {
-            if(!img.exists())
-            {
+            if (!img.exists()) {
                 img.createNewFile();
             }
             FileOutputStream imageOutput = new FileOutputStream(img);
@@ -191,8 +194,8 @@ public class ChatAdapter extends BaseAdapter {
     public static Uri getImageContentUri(Context context, File imageFile) {
         String filePath = imageFile.getAbsolutePath();
         Cursor cursor = context.getContentResolver().query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                new String[] { MediaStore.Images.Media._ID }, MediaStore.Images.Media.DATA + "=? ",
-                new String[] { filePath }, null);
+                new String[]{MediaStore.Images.Media._ID}, MediaStore.Images.Media.DATA + "=? ",
+                new String[]{filePath}, null);
         if (cursor != null && cursor.moveToFirst()) {
             int id = cursor.getInt(cursor.getColumnIndex(MediaStore.MediaColumns._ID));
             Uri baseUri = Uri.parse("content://media/external/images/media");
@@ -209,18 +212,18 @@ public class ChatAdapter extends BaseAdapter {
     }
 
     //**************************************************************
-    /**
-            * summary:将字符串存储为文件 采用Base64解码
 
-             */
+    /**
+     * summary:将字符串存储为文件 采用Base64解码
+     */
     public String streamSaveAsFile(InputStream is, String outFileStr) {
         FileOutputStream fos = null;
         try {
 
-            String filename = System.currentTimeMillis()+"";
-            String path =  context.getFilesDir().getPath().toString()+filename+".jpg";
+            String filename = System.currentTimeMillis() + "";
+            String path = context.getFilesDir().getPath().toString() + filename + ".jpg";
             outFileStr = path;
-            System.out.println("new path is "+path);
+            System.out.println("new path is " + path);
 
             File file = new File(path);
             BASE64Decoder decoder = new BASE64Decoder();
@@ -243,11 +246,7 @@ public class ChatAdapter extends BaseAdapter {
     }
 
     /**
-     *
-     *
      * summary:将字符串存储为文件
-     *
-
      */
     public String stringSaveAsFile(String fileStr, String outFilePath) {
         InputStream out = new ByteArrayInputStream(fileStr.getBytes());
@@ -257,7 +256,6 @@ public class ChatAdapter extends BaseAdapter {
 
     /**
      * 将流转换成字符串 使用Base64加密
-
      */
     public static String streamToString(InputStream inputStream) throws IOException {
         byte[] bt = toByteArray(inputStream);
@@ -268,7 +266,6 @@ public class ChatAdapter extends BaseAdapter {
 
     /**
      * 将流转换成字符串
-
      */
     public static String fileToString(String filePath) throws IOException {
         File file = new File(filePath);
@@ -278,10 +275,7 @@ public class ChatAdapter extends BaseAdapter {
     }
 
     /**
-     *
      * summary:将流转化为字节数组
-
-     *
      */
     public static byte[] toByteArray(InputStream inputStream) throws IOException {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -303,8 +297,6 @@ public class ChatAdapter extends BaseAdapter {
     }
 
     //*************************************************
-
-
 
 
     static class ViewHolder {//复用机制
